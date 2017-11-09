@@ -34,7 +34,7 @@ public class Story implements Serializable {
         text = "";
         placeholders = new ArrayList<String>();
         filledIn = 0;
-        htmlMode = false;
+        htmlMode = true;
         clear();
     }
 
@@ -92,17 +92,36 @@ public class Story implements Serializable {
     private void read(Scanner input) {
         while (input.hasNext()) {
             String word = input.next();
-            if (word.startsWith("<") && word.endsWith(">")) {
-                // a placeholder; replace with e.g. "<0>" so I can find/replace it easily later
-                // (make them bold so that they stand out!)
-                if (htmlMode) {
-                    text += " <b><" + placeholders.size() + "></b>";
+            if (word.contains("<") && word.contains(">") && word.indexOf("<") < word.indexOf(">")) {
+                if (!word.startsWith("<")) {
+                    String[] parts = word.split("<");
+                    word = "<" + parts[1];
+                    text += " " + parts[0];
                 } else {
-                    text += " <" + placeholders.size() + ">";
+                    text += " ";
                 }
-                // "<plural-noun>" becomes "plural noun"
-                String placeholder = word.substring(1, word.length() - 1).replace("-", " ");
-                placeholders.add(placeholder);
+                // a placeholder; replace with e.g. "<0>" so I can find/replace it easily later
+                // (make them bold and orange so that they stand out!)
+                if (htmlMode) {
+                    text += "<font color='#ff6340'><b><" + placeholders.size() + "></b></font>";
+                } else {
+                    text += "<" + placeholders.size() + ">";
+                }
+
+                if (!word.endsWith(">")){
+                    String[] parts = word.split(">");
+                    word = parts[0] + ">";
+
+                    // "<plural-noun>" becomes "plural noun"
+                    String placeholder = word.substring(1, word.length() - 1).replace("-", " ");
+                    placeholders.add(placeholder);
+                    text += parts[1];
+                } else {
+                    // "<plural-noun>" becomes "plural noun"
+                    String placeholder = word.substring(1, word.length() - 1).replace("-", " ");
+                    placeholders.add(placeholder);
+                }
+
             } else {
                 // a regular word; just concatenate
                 if (!text.isEmpty()) {
