@@ -92,12 +92,17 @@ public class Story implements Serializable {
     private void read(Scanner input) {
         while (input.hasNext()) {
             String word = input.next();
+
+            // check if the current word is a placeholder
             if (word.contains("<") && word.contains(">") && word.indexOf("<") < word.indexOf(">")) {
+                // if the placeholder does not start at the very beginning of the word
                 if (!word.startsWith("<")) {
+                    // split the word and put the first characters in the text
                     String[] parts = word.split("<");
                     word = "<" + parts[1];
                     text += " " + parts[0];
                 } else {
+                    // else, just add a space for correct layout
                     text += " ";
                 }
                 // a placeholder; replace with e.g. "<0>" so I can find/replace it easily later
@@ -107,14 +112,17 @@ public class Story implements Serializable {
                 } else {
                     text += "<" + placeholders.size() + ">";
                 }
-
+                // if the placeholder is part of a bigger word and does not end with a >
                 if (!word.endsWith(">")){
+                    // split the word and make word the correct part of the word
                     String[] parts = word.split(">");
                     word = parts[0] + ">";
 
                     // "<plural-noun>" becomes "plural noun"
                     String placeholder = word.substring(1, word.length() - 1).replace("-", " ");
                     placeholders.add(placeholder);
+
+                    // add the splitted characters that belonged at the end of the word.
                     text += parts[1];
                 } else {
                     // "<plural-noun>" becomes "plural noun"
