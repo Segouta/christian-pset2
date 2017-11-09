@@ -3,6 +3,7 @@ package com.example.christian.christian_pset2;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 
@@ -20,7 +21,7 @@ public class StoryActivity extends AppCompatActivity {
         String receivedText = intent.getStringExtra("OUT");
 
         TextView textView = findViewById(R.id.StoryText);
-        textView.setText(receivedText);
+        textView.setText(Html.fromHtml(receivedText));
 
         textView.setMovementMethod(new ScrollingMovementMethod());
     }
@@ -39,6 +40,7 @@ public class StoryActivity extends AppCompatActivity {
     public void pickStory(View view) {
         Intent intent = new Intent(this, PickActivity.class);
         startActivity(intent);
+        finish();
 
     }
 

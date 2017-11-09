@@ -110,9 +110,9 @@ public class PickActivity extends AppCompatActivity {
         if (radioButtons.getCheckedRadioButtonId() == -1){
             Toast.makeText(getApplicationContext(), "Please select story first!", Toast.LENGTH_SHORT).show();
         } else {
-            String filledInWord = wordAdder.getText().toString();
+            String filledInWord = "<b>" + wordAdder.getText().toString() + "</b>";
 
-            if (filledInWord.length() == 0) {
+            if (filledInWord.length() <= 7) {
                 Toast.makeText(getApplicationContext(), "Please enter a " + story.getNextPlaceholder() + "!", Toast.LENGTH_SHORT).show();
             } else {
                 story.fillInPlaceholder(filledInWord);
